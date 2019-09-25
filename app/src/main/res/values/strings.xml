@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">RoomDataBase</string>
+    <string name="action_settings">Settings</string>
+    <string name="edit_title">Title</string>
+    <string name="txtname">First name</string>
+    <string name="txtlastname">Last name</string>
+    <string name="txtage">Age</string>
+    <string name="txtCity">City</string>
+    <string name="txtstate">State</string>
+    <string name="txtidentity">Identity</string>
+    <string name="txtmarid">Married status</string>
+    <string name="married">Married</string>
+    <string name="unmarried">unmarried</string>
+    <string name="save">Save</string>
+    <string name="txtgender">Gender</string>
+    <string name="register">Register</string>
+    <string name="txtmobile">Mobile Number</string>
+</resources>
