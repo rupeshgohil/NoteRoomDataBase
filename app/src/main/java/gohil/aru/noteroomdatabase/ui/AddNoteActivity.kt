@@ -9,8 +9,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
+import com.google.gson.Gson
 import gohil.aru.noteroomdatabase.BaseActivity
 import gohil.aru.noteroomdatabase.R
+import gohil.aru.noteroomdatabase.modal.Note
 import gohil.aru.noteroomdatabase.repositery.NoteReposetory
 import gohil.aru.noteroomdatabase.repositery.NoteReposetory.status
 import kotlinx.android.synthetic.main.activity_add_note.*
@@ -25,9 +27,60 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     var strCategory:String?= null
      var notereposetory: NoteReposetory? =null
     var insetstatus:Long? = null
+    var mNote = Note()
+    var isUpdate:Boolean =false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
+        intent = intent
+        mArrayIdentity!!.add("Select Identity")
+        mArrayIdentity!!.add("Aadhar card")
+        mArrayIdentity!!.add("Voter card")
+        mArrayIdentity!!.add("Passport")
+        mArrayIdentity!!.add("Driving Licence")
+        if(intent != null){
+            if(intent.getStringExtra("Edit").equals("true",ignoreCase = true)){
+                mNote = intent.getSerializableExtra("note") as Note
+                edtFirstname.setText(mNote.firstname)
+                edtLastname.setText(mNote.lastname)
+                edtAge.setText(mNote.age)
+                edtCity.setText(mNote.city)
+                edtmobile.setText(mNote.mobileNumber)
+                if(mNote.gender.equals("Male",ignoreCase = true)){
+                    strGender = "Male"
+                    rbmale.isChecked = true
+                    rbfemale.isChecked =false
+                }else{
+                    strGender = "Female"
+                    rbmale.isChecked = false
+                    rbfemale.isChecked =true
+                }
+                if(mNote.marriedStatus.equals("Married",ignoreCase = true)){
+                    cbmarried.isChecked =true
+                    cbunmarried.isChecked =false
+                    strMarried_status = "Married"
+                }else{
+                    cbmarried.isChecked =false
+                    cbunmarried.isChecked =true
+                    strMarried_status = "UnMarried"
+                }
+                if(mNote.identity.equals("Aadhar card",ignoreCase = true)){
+                    spinnercategory.setSelection(0)
+                    strCategory = mArrayIdentity!!.get(1)
+                }else if(mNote.identity.equals("Voter card",ignoreCase = true)){
+                    spinnercategory.setSelection(2)
+                    strCategory = mArrayIdentity!!.get(2)
+                }else if(mNote.identity.equals("Passport",ignoreCase = true)){
+                    spinnercategory.setSelection(3)
+                    strCategory = mArrayIdentity!!.get(3)
+                }else if(mNote.identity.equals("Driving Licence",ignoreCase = true)){
+                    spinnercategory.setSelection(4)
+                    strCategory = mArrayIdentity!!.get(4)
+                }
+                btnsave.setText("Update")
+                isUpdate =true
+            }
+        }
         notereposetory =  NoteReposetory(getApplicationContext())
 
         gender.setOnCheckedChangeListener(
@@ -43,11 +96,7 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                 }
 
             })
-        mArrayIdentity!!.add("Select Identity")
-        mArrayIdentity!!.add("Aadhar card")
-        mArrayIdentity!!.add("Voter card")
-        mArrayIdentity!!.add("Passport")
-        mArrayIdentity!!.add("Driving Licence")
+
         spinnercategory!!.onItemSelectedListener =this
         spinnercategory.adapter = ArrayAdapter(this@AddNoteActivity,android.R.layout.simple_spinner_item,mArrayIdentity!!)
         cbmarried.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -68,13 +117,24 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         }
         btnsave.setOnClickListener {
             if(isvalidField()){
-                notereposetory!!.InsetTask(edtFirstname.text.toString().trim(),
-                    edtLastname.text.toString().trim(),
-                    edtAge.text.toString().trim(),
-                    edtCity.text.toString().trim(),
-                    edtmobile.text.toString().trim(),
-                    strCategory,
-                    strGender,strMarried_status)
+                if(isUpdate){
+
+                    notereposetory!!.UpdateTask(mNote.id,edtFirstname.text.toString().trim(),
+                        edtLastname.text.toString().trim(),
+                        edtAge.text.toString().trim(),
+                        edtCity.text.toString().trim(),
+                        edtmobile.text.toString().trim(),
+                        strCategory,
+                        strGender,strMarried_status)
+                }else{
+                    notereposetory!!.InsetTask(edtFirstname.text.toString().trim(),
+                        edtLastname.text.toString().trim(),
+                        edtAge.text.toString().trim(),
+                        edtCity.text.toString().trim(),
+                        edtmobile.text.toString().trim(),
+                        strCategory,
+                        strGender,strMarried_status)
+                }
 
                 Handler().postDelayed({
                     Log.e("StatusUpdateCode==>", "Null"+status)

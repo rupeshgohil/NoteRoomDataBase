@@ -16,9 +16,9 @@ public interface DaoAccess {
     @Insert
     long InsetTask(Note note);
     @Update
-    void UpdateTask(Note note);
+    int UpdateTask(Note note);
     @Delete
-    void DeleteTask(Note note);
+    int DeleteTask(Note note);
 
     @Query("SELECT * FROM note")
     LiveData<List<Note>> fetchAlldata();

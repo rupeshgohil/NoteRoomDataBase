@@ -14,13 +14,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gohil.aru.noteroomdatabase.R;
 import gohil.aru.noteroomdatabase.modal.Note;
+import gohil.aru.noteroomdatabase.ui.MainActivity;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
     Context mContext;
     public List<Note> mArray;
     View mView;
+    MainActivity multiClickListener;
     public TaskAdapter(Context con,List<Note> notearray){
         this.mContext = con;
         this.mArray =notearray;
+        this.multiClickListener = (MainActivity)con;
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tvname)
@@ -35,6 +38,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
         TextView tvmarriedstatus;
         @BindView(R.id.tvmobile)
         TextView tvmobile;
+        @BindView(R.id.tvedit)
+        TextView tvedit;
+        @BindView(R.id.tvdelete)
+        TextView tvdelete;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,mView);
@@ -48,6 +56,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             tvidentity.setText("Identity"+" : "+note.getIdentity());
             tvmarriedstatus.setText("Married Status"+" : "+note.getMarriedStatus());
             tvmobile.setText("Mobile"+" : "+note.getMobileNumber());
+            tvedit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    multiClickListener.onMultiClick(0, note,"edit");
+                }
+            });
+            tvdelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    multiClickListener.onMultiClick(0, note,"del");
+                }
+            });
         }
     }
     @NonNull
