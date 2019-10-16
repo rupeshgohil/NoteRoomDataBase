@@ -12,13 +12,14 @@ import android.widget.RadioGroup
 import com.google.gson.Gson
 import gohil.aru.noteroomdatabase.BaseActivity
 import gohil.aru.noteroomdatabase.R
+import gohil.aru.noteroomdatabase.listener.ResponseListener
 import gohil.aru.noteroomdatabase.modal.Note
 import gohil.aru.noteroomdatabase.repositery.NoteReposetory
-import gohil.aru.noteroomdatabase.repositery.NoteReposetory.status
 import kotlinx.android.synthetic.main.activity_add_note.*
 
 
-class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
+class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener,ResponseListener{
+
 
 
     var strMarried_status:String?= "Married"
@@ -26,7 +27,7 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     var strGender:String?= "Male"
     var strCategory:String?= null
      var notereposetory: NoteReposetory? =null
-    var insetstatus:Long? = null
+    var response:Long? = null
     var mNote = Note()
     var isUpdate:Boolean =false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +82,8 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                 isUpdate =true
             }
         }
-        notereposetory =  NoteReposetory(getApplicationContext())
-
+        notereposetory =  NoteReposetory(this@AddNoteActivity)
+        notereposetory!!.setListener(this@AddNoteActivity)
         gender.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
 
@@ -117,9 +118,10 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         }
         btnsave.setOnClickListener {
             if(isvalidField()){
+
                 if(isUpdate){
 
-                    notereposetory!!.UpdateTask(mNote.id,edtFirstname.text.toString().trim(),
+                     notereposetory!!.UpdateTask(mNote.id,edtFirstname.text.toString().trim(),
                         edtLastname.text.toString().trim(),
                         edtAge.text.toString().trim(),
                         edtCity.text.toString().trim(),
@@ -135,17 +137,6 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                         strCategory,
                         strGender,strMarried_status)
                 }
-
-                Handler().postDelayed({
-                    Log.e("StatusUpdateCode==>", "Null"+status)
-
-                    if(status.toInt() != 0){
-                        Log.e("Call:2","call")
-                        var mIntent = Intent()
-                        setResult(200,mIntent)
-                        finish()
-                    }
-                }, 2000)
 
             }
         }
@@ -188,6 +179,16 @@ class AddNoteActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
             return  false
         }else{
             return true
+        }
+
+    }
+    override fun onResponse(status: Long) {
+        Log.e("Call:2","call")
+        if(status!!.toInt() != -1){
+
+            var mIntent = Intent()
+            setResult(200,mIntent)
+            finish()
         }
 
     }

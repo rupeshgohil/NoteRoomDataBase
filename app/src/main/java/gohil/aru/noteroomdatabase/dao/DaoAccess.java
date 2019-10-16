@@ -25,5 +25,8 @@ public interface DaoAccess {
 
     @Query("SELECT * FROM Note WHERE id =:id")
     LiveData<Note> getSingleTask(int id);
-
+    @Query("SELECT * FROM note ORDER BY Firstname ASC")
+    LiveData<List<Note>> AtoZdata();
+    @Query("SELECT * FROM note ORDER BY Firstname DESC")
+    LiveData<List<Note>> ZtoAdata();
 }
