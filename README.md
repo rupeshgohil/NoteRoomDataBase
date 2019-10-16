@@ -5,7 +5,7 @@ This is a demo app on how to implement Room persistance library, making use of L
 
 <img src="https://github.com/rupeshgohil/NoteRoomDataBase/blob/master/screen/1.png" width="200" style="max-width:100%;"> 
   <img src="https://github.com/rupeshgohil/NoteRoomDataBase/blob/master/screen/2.png" width="200" style="max-width:100%;"> 
-  <img src="https://github.com/rupeshgohil/NoteRoomDataBase/blob/master/screen/3.png" width="200" style="max-width:100%;"></br></br>
+  <img src="https://github.com/rupeshgohil/NoteRoomDataBase/blob/master/screen/3.png" width="200" style="max-width:100%;">
 
 <h3>How to implement Room: a SQLite object mapping library in your Android app?</h3>
 Step 1: Add following library and annotation processor to your app gradle file.
